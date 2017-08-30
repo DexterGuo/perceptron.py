@@ -1,0 +1,37 @@
+#coding=utf8
+from numpy import *
+class Perceptron2():
+    def __init__(self, learn_rate=1, n_iter=20):
+        self.learn_rate = learn_rate
+        self.n_iter = n_iter
+    def fit(self, X,Y):
+        self.gram = X*X.T
+        m,n = shape(X)
+        self.alpha = zeros((1,m))
+        self.intercept = 0
+        self.w = zeros((1,n))
+        flag = False
+        for i in range(self.n_iter):
+            if flag:
+                for x,y,alpha in zip(X,Y,self.alpha[0]):
+                    self.w += x*alpha*y
+                return i
+            for j in range(m):
+                flag = True
+                y_ = self.intercept
+                for k in range(m):
+                    y_ += array(self.gram[j])[0][k]*Y[k]*self.alpha[0][k]
+                if Y[j]*y_ <= 0:
+                    flag = False
+                    self.alpha[0][j] += self.learn_rate
+                    self.intercept += self.learn_rate*Y[j]
+                    break
+if __name__=='__main__':
+    print('welcome to use perception tool')
+    X = mat([[3,3],[4,3],[1,1]])
+    Y = [1,1,-1]
+    perceptron = Perceptron2()
+    perceptron.fit(X,Y)
+    print("the alpha is ",perceptron.alpha)
+    print("the w is",perceptron.w[0])
+    print(";the b is ",perceptron.intercept)
